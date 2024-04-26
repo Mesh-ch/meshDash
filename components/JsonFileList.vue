@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const emit = defineEmits(['childEvent'])
+const emit = defineEmits(['childEvent', 'file-selected'])
 const logFiles = ref<string[]>([])
 
 const { data: fileLst, pending } = await useLazyFetch('/api/fetchAllFilenames', {
@@ -20,6 +20,7 @@ const selectedFile = ref<string>('')
 function selectFile(file: string) {
   selectedFile.value = file
   emit('file-selected', file)
+  console.log('selected file: ', file)
 }
 </script>
 

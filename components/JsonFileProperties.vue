@@ -4,31 +4,14 @@ import { ref, watch } from 'vue'
 const props = defineProps<{ selectedFile: string }>()
 const fileProperties = ref<Record<string, any> | null>(null)
 
-// watch(() => props.selectedFile, async (fileName) => {
-//   if (fileName) {
-//     const { data, error } = await useFetch(`/api/file/${fileName}`)
-
-//     if (error.value)
-//       console.error('Failed to fetch file:', error.value)
-//     else
-//       fileProperties.value = data.value
-//   }
-// }, { immediate: true })
-
-watch(() => props.selectedFile, (fileName) => {
+watch(() => props.selectedFile, async (fileName) => {
   if (fileName) {
-    const { data, error } = useAsyncData(`file/${fileName}`, async () => {
-      const response = await fetch(`/api/file/${fileName}`)
-      if (!response.ok)
-        throw new Error('Failed to fetch file')
+    console.log(fileName)
+    // const { data, error } = await $fetch(`/api/file/${fileName}`)
+    const { data, error } = await useFetch(`/api/file/${fileName}`)
+    console.log(data)
 
-      return response.json()
-    })
-
-    if (error.value)
-      console.error('Failed to fetch file:', error.value)
-    else
-      fileProperties.value = data.value
+    fileProperties.value = data.value
   }
 }, { immediate: true })
 </script>

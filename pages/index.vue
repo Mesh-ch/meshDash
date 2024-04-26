@@ -14,8 +14,5 @@ function handleFileSelected(file: string) {
 
     <JsonFileList @file-selected="handleFileSelected" />
     <JsonFileProperties :selected-file="selectedFile" />
-
-    <!-- <JsonFileList />
-    <JsonFileProperties /> -->
   </div>
 </template>
