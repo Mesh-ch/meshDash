@@ -11,12 +11,6 @@ const inactiveClass = ref(
 
 <template>
   <div class="flex">
-    <!-- Backdrop -->
-    <!-- <div -->
-    <!--   class="fixed  z-20 transition-opacity bg-white opacity-50" -->
-    <!-- /> -->
-    <!-- End Backdrop -->
-
     <div
       class="fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-gray-800"
     >
