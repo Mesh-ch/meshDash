@@ -2,7 +2,7 @@
 
 Dashboard website for manufacture log monitoring. -- by mesh.ch
 
-## Install
+## Prerequisite
 
 ### Install nodejs
 
@@ -22,6 +22,8 @@ nvm install --lts
 iwr https://get.pnpm.io/install.ps1 -useb | iex
 
 ```
+
+## Run the website
 
 ### Install package and run
 If not using `pnpm`, use `npm` instead.
