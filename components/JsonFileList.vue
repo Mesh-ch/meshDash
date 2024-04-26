@@ -14,13 +14,18 @@ watch(fileLst, (newLst) => {
 onMounted(async () => {
   const _ = await $fetch('/api/fetchAllFilenames')
   logFiles.value = fileLst.value
+
+  const eventSource = useEventSource('/api/fetchAllFilenames')
+  eventSource.onmessage = (event) => {
+    logFiles.value = JSON.parse(event.data)
+  }
 })
 
 const selectedFile = ref<string>('')
 function selectFile(file: string) {
   selectedFile.value = file
   emit('file-selected', file)
-  console.log('selected file: ', file)
+//   console.log('selected file: ', file)
 }
 </script>
 
