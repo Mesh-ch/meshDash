@@ -2,6 +2,7 @@ import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
+  ssr: true,
   modules: [
     '@vueuse/nuxt',
     '@unocss/nuxt',
@@ -62,6 +63,10 @@ export default defineNuxtConfig({
 
   devtools: {
     enabled: true,
+
+    timeline: {
+      enabled: true,
+    },
   },
 
   features: {

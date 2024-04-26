@@ -1,60 +1,56 @@
-<script steup lang="ts">
-// import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { useFetch } from 'nuxt/app'
 
-// export default defineComponent({
-//   data() {
-//     return {
-//       files: [] as string[],
-//       jsonData: null as any | null
-//     };
-//   },
-//   methods: {
-//     async loadFile(file: string) {
-//       // Make a request to the server to load the JSON file
-//       // This is just a placeholder and needs to be replaced with actual code
-//       this.jsonData = /* code to load JSON file */;
-//     }
-//   },
-//   created() {
-//     // Load the file list when the component is created
-//     // This is just a placeholder and needs to be replaced with actual code
-//     this.files = /* code to load file list */;
-//   }
-// });
-</script>
+const files = ref<string[]>([])
+const fileProperties = ref(null)
+const isLoading = ref(true)
 
-<!-- <script setup lang="ts">
-const fs = require('node:fs')
-// import data from '/logs/20240325_Monday/_14h03_4323-048599-01-297707.json.json'
+onMounted(async () => {
+  isLoading.value = true
+  const { data } = await useFetch('/api/loadFilenames')
 
-// const allLog = import.meta.glob('../logs/20240325_Monday/*.json')
-
-// for (const name in allLog)
-//   console.log(name)
-// console.log(allLog)
-// const mod: any = await modules[path]()
-// extraLocales = mod.default
-
-// const fs = require('node:fs')
-
-// const testLog = await fetch('/logs/20240325_Monday/_14h03_4323-048599-01-297707.json.json')
-// const dat = testLog.json()
-// console.log(testLog)
-const { data: log } = await useAsyncData('fab-log', () => {
-  log = JSON.parse(fs.readFileSync('../public/logs/20240325_Monday/_14h03_4323-048599-01-297707.json.json', 'utf8'))
+  await nextTick()
+  files.value = data.value
+  console.log('File Loading Done!')
+  isLoading.value = false
 })
-console.log(log)
-</script> -->
+
+async function loadFileProperties(fileName: string) {
+  const { data, error } = await useFetch(`/api/file/${fileName}`)
+
+  if (error.value)
+    console.error('Failed to fetch file:', error.value)
+  else
+    fileProperties.value = data.value
+}
+</script>
 
 <template>
   <div>
+    <h1>JSON File List</h1>
+
+    <div v-if="isLoading">
+      Loading files...
+    </div>
+
     <table>
-      <tr v-for="(file, index) in files" :key="index" @click="loadFile(file)">
-        <td>{{ file }}</td>
-      </tr>
+      <thead>
+        <tr>
+          <th>File Name</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr v-for="file in files" :key="file" @click="loadFileProperties(file)">
+          <td>{{ file }}</td>
+        </tr>
+      </tbody>
     </table>
-    <div v-if="jsonData">
-      <pre>{{ jsonData }}</pre>
+
+    <div v-if="fileProperties">
+      <h2>File Properties</h2>
+      <pre>{{ fileProperties }}</pre>
     </div>
   </div>
 </template>
