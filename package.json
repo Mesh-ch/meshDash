@@ -32,7 +32,8 @@
     "nuxt": "^3.11.2",
     "pinia": "^2.1.7",
     "typescript": "^5.4.5",
-    "vue-tsc": "^2.0.14"
+    "vue-tsc": "^2.0.14",
+    "dayjs-nuxt": "^1.2.7"
   },
   "dependencies": {
     "json-converter": "^1.0.0"
