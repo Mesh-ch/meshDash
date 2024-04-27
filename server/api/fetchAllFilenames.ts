@@ -1,10 +1,9 @@
-import { promises as fs, watch } from 'node:fs'
+import { promises as fs } from 'node:fs'
 import path from 'node:path'
-import { defineEventHandler, sendStream } from 'h3'
+import { defineEventHandler } from 'h3'
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async () => {
   const logsDir = path.resolve('logs')
-  console.log(logsDir)
 
   // Helper function to asynchronously find all files
   const findFiles = async (dir: string): Promise<string[]> => {
