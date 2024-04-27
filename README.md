@@ -26,6 +26,11 @@ iwr https://get.pnpm.io/install.ps1 -useb | iex
 
 ```
 
+### Install packages
+```bash
+pnpm i
+````
+
 ## Link Log Folder (Important)
 
 You need to create a softlink to the `log` folder under the **project root folder** to run the website properly:
@@ -35,23 +40,16 @@ ln -s <location-of-your-log-folder> log
 ```
 
 ## Run the website
+*If not using `pnpm`, use `npm` instead.*
 
-### Install package and run
-If not using `pnpm`, use `npm` instead.
-
-#### Install packages
-```bash
-pnpm i
-````
-
-#### Run Dev
-
+### Dev Version
 ```bash
 pnpm dev
 ```
 
-#### Run Production
 
+### Production Version
 ```bash
 pnpm build
+node .output/server/index.mjs
 ```
