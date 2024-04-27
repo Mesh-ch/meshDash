@@ -30,8 +30,9 @@ iwr https://get.pnpm.io/install.ps1 -useb | iex
 
 You need to create a softlink to the `log` folder under the **project root folder** to run the website properly:
 
-````bash
+```bash
 ln -s <location-of-your-log-folder> log
+```
 
 ## Run the website
 
