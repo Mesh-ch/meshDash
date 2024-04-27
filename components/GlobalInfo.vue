@@ -18,9 +18,6 @@ const avgJobsPerDay = computed(() => {
       <h2 class="mb-2 text-xl font-bold">
         Job Number: {{ totalJobs }}
       </h2>
-      <p class="text-4xl font-bold">
-        {{ totalFiles }}
-      </p>
       <p class="text-sm">
         {{ successJobs }} success / {{ failedJobs }} failed
       </p>
@@ -37,9 +34,6 @@ const avgJobsPerDay = computed(() => {
       <h2 class="mb-2 text-xl font-bold">
         Average Jobs per Day
       </h2>
-      <p class="text-4xl font-bold">
-        {{ averageJobsPerDay }}
-      </p>
       <p class="text-xl font-bold">
         {{ avgJobsPerDay.toFixed(2) }}
       </p>

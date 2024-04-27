@@ -25,7 +25,8 @@ const importantProperties = ['name', 'date', 'version', 'status']
 function displayFileName(file: string) {
   const parts = file.split('/')
   const fileName = parts.pop() || ''
-  const jobName = fileName.replace(/[SF]|_\d{2}h\d{2}|\.json/g, '')
+  // const jobName = fileName.replace(/[SF]|_\d{2}h\d{2}_|\.json/g, '')
+  const jobName = fileName.replace(/[SF]_|\.json/g, '')
   return jobName
 }
 </script>
@@ -39,7 +40,7 @@ function displayFileName(file: string) {
     </div>
     <div v-else-if="fileProperties">
       <h2 class="mb-4 text-2xl font-bold">
-        Properties of {{ displayFileName(selectedFile) }}
+        {{ displayFileName(selectedFile) }}
       </h2>
       <table class="table-auto">
         <tr v-for="prop in importantProperties" :key="prop">

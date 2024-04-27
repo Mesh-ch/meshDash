@@ -33,7 +33,8 @@ const filteredFiles = computed(() => {
 function displayFileName(file: string) {
   const parts = file.split('/')
   const fileName = parts.pop() || ''
-  const jobName = fileName.replace(/[SF]|_\d{2}h\d{2}_|\.json/g, '')
+  // const jobName = fileName.replace(/[SF]|_\d{2}h\d{2}_|\.json/g, '')
+  const jobName = fileName.replace(/[SF]_|\.json/g, '')
   return jobName
 }
 

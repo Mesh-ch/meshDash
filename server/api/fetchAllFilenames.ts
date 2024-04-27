@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
   )
 
   // Log the list of file names
-  console.log('JSON Files Found: \n', fileNames)
+  // console.log('JSON Files Found: \n', fileNames)
 
   return fileNames
 })
