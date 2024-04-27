@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const emit = defineEmits(['childEvent', 'file-selected'])
+const emit = defineEmits(['childEvent', 'fileSelected'])
 const logFiles = ref<string[]>([])
 const selectedDate = ref<string>('')
 const selectedFile = ref<string>('')
@@ -40,7 +40,7 @@ function displayFileName(file: string) {
 
 function selectFile(file: string) {
   selectedFile.value = file
-  emit('file-selected', file)
+  emit('fileSelected', file)
 }
 </script>
 
