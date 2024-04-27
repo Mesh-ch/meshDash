@@ -2,6 +2,9 @@
 import { ref, watch } from 'vue'
 
 const props = defineProps<{ selectedFile: string }>()
+
+const dayjs = useDayjs()
+
 const fileProperties = ref<Record<string, any> | null>(null)
 const error = ref<any>(null)
 
@@ -20,8 +23,6 @@ watch(() => props.selectedFile, async (fileName) => {
   }
 }, { immediate: true })
 
-const importantProperties = ['name', 'date', 'version', 'status']
-
 function displayFileName(file: string) {
   const parts = file.split('/')
   const fileName = parts.pop() || ''
@@ -29,6 +30,47 @@ function displayFileName(file: string) {
   const jobName = fileName.replace(/[SF]_|\.json/g, '')
   return jobName
 }
+
+const status = computed(() => {
+  return props.selectedFile.includes('S') ? 'Success' : 'Failed'
+})
+
+const manufacturingTime = computed(() => {
+  if (fileProperties.value) {
+    const startTime = fileProperties.value.data.start_time
+    const endTime = fileProperties.value.data.end_time
+    const duration_in_sec = endTime - startTime
+
+    const hours = Math.floor(duration_in_sec / (60 * 60))
+    const minutes = Math.floor((duration_in_sec % (60 * 60)) / 60)
+    const seconds = Math.floor((duration_in_sec % 60))
+    return `
+    ${hours.toString().padStart(2, '0')}h : \
+    ${minutes.toString().padStart(2, '0')}m : \
+    ${seconds.toString().padStart(2, '0')}s
+    `
+  }
+  return ''
+})
+
+const workfileplan = computed(() => {
+  if (fileProperties.value) {
+    const workfileplanData = fileProperties.value.data?.workfileplan.data
+    if (workfileplanData) {
+      const { job_id, modified_date, type, total_length_m, total_weight_kg, rebar_diameter, pallet } = workfileplanData
+      return {
+        job_id,
+        modified_date: new Date(modified_date).toLocaleString(),
+        type,
+        total_length_m,
+        total_weight_kg,
+        rebar_diameter,
+        pallet,
+      }
+    }
+  }
+  return null
+})
 </script>
 
 <template>
@@ -42,27 +84,81 @@ function displayFileName(file: string) {
       <h2 class="mb-4 text-2xl font-bold">
         {{ displayFileName(selectedFile) }}
       </h2>
-      <table class="table-auto">
-        <tr v-for="prop in importantProperties" :key="prop">
-          <td class="pr-4 font-bold">
-            {{ prop }}
-          </td>
-          <td>{{ fileProperties[prop] }}</td>
-        </tr>
-      </table>
-      <div class="mt-8">
-        <h3 class="mb-2 text-xl font-bold">
-          Additional Properties
+      <div class="mb-8 flex space-x-8">
+        <div>
+          <h3 class="mb-2 text-lg font-bold">
+            Status
+          </h3>
+          <p>{{ status }}</p>
+        </div>
+        <div>
+          <h3 class="mb-2 text-lg font-bold">
+            Type
+          </h3>
+          <p>{{ fileProperties.type }}</p>
+        </div>
+        <div>
+          <h3 class="mb-2 text-lg font-bold">
+            Version
+          </h3>
+          <p>{{ fileProperties.version }}</p>
+        </div>
+        <div>
+          <h3 class="mb-2 text-lg font-bold">
+            Manufacturing Time
+          </h3>
+          <p>{{ manufacturingTime }}</p>
+        </div>
+      </div>
+      <div v-if="workfileplan">
+        <h3 class="mb-4 text-xl font-bold">
+          Workfileplan
         </h3>
-        <table class="table-auto">
-          <tr v-for="(value, key) in fileProperties" :key="key">
-            <template v-if="!importantProperties.includes(key)">
+        <table class="w-full table-auto">
+          <tbody>
+            <tr>
               <td class="pr-4 font-bold">
-                {{ key }}
+                Job ID
               </td>
-              <td>{{ value }}</td>
-            </template>
-          </tr>
+              <td>{{ workfileplan.job_id }}</td>
+            </tr>
+            <tr>
+              <td class="pr-4 font-bold">
+                Modified Date
+              </td>
+              <td>{{ workfileplan.modified_date }}</td>
+            </tr>
+            <tr>
+              <td class="pr-4 font-bold">
+                Type
+              </td>
+              <td>{{ workfileplan.type }}</td>
+            </tr>
+            <tr>
+              <td class="pr-4 font-bold">
+                Total Length (m)
+              </td>
+              <td>{{ workfileplan.total_length_m }}</td>
+            </tr>
+            <tr>
+              <td class="pr-4 font-bold">
+                Total Weight (kg)
+              </td>
+              <td>{{ workfileplan.total_weight_kg }}</td>
+            </tr>
+            <tr>
+              <td class="pr-4 font-bold">
+                Rebar Diameter
+              </td>
+              <td>{{ workfileplan.rebar_diameter }}</td>
+            </tr>
+            <tr>
+              <td class="pr-4 font-bold">
+                Pallet
+              </td>
+              <td>{{ workfileplan.pallet }}</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
