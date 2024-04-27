@@ -1,6 +1,6 @@
 # MeshDash
-
-Dashboard website for manufacture log monitoring. -- by mesh.ch
+![](https://github.com/Mesh-ch/meshDash/blob/main/.github/preview.png)
+<h1 align="center">MeshDash: Manufacture Log Monitor</h1>
 
 ## Prerequisite
 
