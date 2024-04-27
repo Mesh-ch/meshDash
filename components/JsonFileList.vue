@@ -5,19 +5,17 @@ const emit = defineEmits(['childEvent', 'file-selected'])
 const logFiles = ref<string[]>([])
 const selectedDate = ref<string>('')
 const selectedFile = ref<string>('')
+const pending = ref<boolean>(false)
 
-// lazy-fetching data and watch
-const { data: fileLst, pending } = await useLazyFetch('/api/fetchAllFilenames', {
-  server: false,
-})
-watch(fileLst, (newLst) => {
-  console.log('New List Updated...')
-})
+// when reloading the page
+async function fetchFiles() {
+  pending.value = true
+  const data = await $fetch('/api/fetchAllFilenames')
+  logFiles.value = data
+  pending.value = false
+}
 
-onMounted(async () => {
-  const _ = await $fetch('/api/fetchAllFilenames')
-  logFiles.value = fileLst.value
-})
+onMounted(fetchFiles)
 
 // filtering files based on date
 const uniqueDates = computed(() => {
@@ -33,7 +31,10 @@ const filteredFiles = computed(() => {
 })
 
 function displayFileName(file: string) {
-  return file.split('/').pop() || ''
+  const parts = file.split('/')
+  const fileName = parts.pop() || ''
+  const jobName = fileName.replace(/[SF]|_\d{2}h\d{2}_|\.json/g, '')
+  return jobName
 }
 
 function selectFile(file: string) {
@@ -47,9 +48,9 @@ function selectFile(file: string) {
     <h2 class="mb-4 text-2xl font-bold">
       LOG Files
     </h2>
-    <div class="mb-4">
-      <label for="date-select" class="mb-2 block">Select Date:</label>
-      <select id="date-select" v-model="selectedDate" class="border border-gray-300 rounded p-2">
+    <div class="mb-4 flex items-center">
+      <label for="date-select" class="mb-2 mr-4 block">Select Date:</label>
+      <select id="date-select" v-model="selectedDate" class="mr-4 border border-gray-300 rounded p-2">
         <option value="">
           All Dates
         </option>
@@ -57,6 +58,9 @@ function selectFile(file: string) {
           {{ date }}
         </option>
       </select>
+      <button class="rounded bg-blue-500 p-2 text-white hover:bg-blue-600" @click="fetchFiles">
+        Refresh
+      </button>
     </div>
     <ul v-if="!pending" class="space-y-2">
       <li v-for="file in filteredFiles" :key="file">

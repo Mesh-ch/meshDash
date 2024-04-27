@@ -9,7 +9,6 @@ watch(() => props.selectedFile, async (fileName) => {
   if (fileName) {
     try {
       const data = await $fetch(`/api/file/${fileName}`)
-      //   console.log(data)
       fileProperties.value = data
       error.value = null
     }
@@ -22,6 +21,13 @@ watch(() => props.selectedFile, async (fileName) => {
 }, { immediate: true })
 
 const importantProperties = ['name', 'date', 'version', 'status']
+
+function displayFileName(file: string) {
+  const parts = file.split('/')
+  const fileName = parts.pop() || ''
+  const jobName = fileName.replace(/[SF]|_\d{2}h\d{2}|\.json/g, '')
+  return jobName
+}
 </script>
 
 <template>
@@ -33,7 +39,7 @@ const importantProperties = ['name', 'date', 'version', 'status']
     </div>
     <div v-else-if="fileProperties">
       <h2 class="mb-4 text-2xl font-bold">
-        Properties of {{ selectedFile }}
+        Properties of {{ displayFileName(selectedFile) }}
       </h2>
       <table class="table-auto">
         <tr v-for="prop in importantProperties" :key="prop">
