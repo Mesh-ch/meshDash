@@ -20,49 +20,44 @@ watch(() => props.selectedFile, async (fileName) => {
     }
   }
 }, { immediate: true })
+
+const importantProperties = ['name', 'date', 'version', 'status']
 </script>
 
 <template>
-  <div v-if="error">
-    <p>Error: {{ error.message }}</p>
-  </div>
-  <div v-else-if="fileProperties">
-    <h2>Properties of {{ selectedFile }}</h2>
-    <table>
-      <tr v-for="(value, key) in fileProperties" :key="key">
-        <td>{{ key }}</td>
-        <td>{{ value }}</td>
-      </tr>
-    </table>
+  <div class="p-4">
+    <div v-if="error">
+      <p class="text-red-500">
+        Error: {{ error.message }}
+      </p>
+    </div>
+    <div v-else-if="fileProperties">
+      <h2 class="mb-4 text-2xl font-bold">
+        Properties of {{ selectedFile }}
+      </h2>
+      <table class="table-auto">
+        <tr v-for="prop in importantProperties" :key="prop">
+          <td class="pr-4 font-bold">
+            {{ prop }}
+          </td>
+          <td>{{ fileProperties[prop] }}</td>
+        </tr>
+      </table>
+      <div class="mt-8">
+        <h3 class="mb-2 text-xl font-bold">
+          Additional Properties
+        </h3>
+        <table class="table-auto">
+          <tr v-for="(value, key) in fileProperties" :key="key">
+            <template v-if="!importantProperties.includes(key)">
+              <td class="pr-4 font-bold">
+                {{ key }}
+              </td>
+              <td>{{ value }}</td>
+            </template>
+          </tr>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
-<!--
-<script setup lang="ts">
-import { ref, watch } from 'vue'
-
-const props = defineProps<{ selectedFile: string }>()
-const fileProperties = ref<Record<string, any> | null>(null)
-
-watch(() => props.selectedFile, async (fileName) => {
-  if (fileName) {
-    console.log(fileName)
-    // const { data, error } = await $fetch(`/api/file/${fileName}`)
-    const { data, error } = await useFetch(`/api/file/${fileName}`)
-    console.log(data)
-
-    fileProperties.value = data.value
-  }
-}, { immediate: true })
-</script>
-
-<template>
-  <div v-if="fileProperties">
-    <h2>Properties of {{ selectedFile }}</h2>
-    <table>
-      <tr v-for="(value, key) in fileProperties" :key="key">
-        <td>{{ key }}</td>
-        <td>{{ value }}</td>
-      </tr>
-    </table>
-  </div>
-</template> -->

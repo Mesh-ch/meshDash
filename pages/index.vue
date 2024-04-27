@@ -9,10 +9,17 @@ function handleFileSelected(file: string) {
 </script>
 
 <template>
-  <div>
-    <!-- <Sidebar /> -->
-
-    <JsonFileList @file-selected="handleFileSelected" />
-    <JsonFileProperties :selected-file="selectedFile" />
+  <div class="mx-auto p-4 container">
+    <h1 class="mb-8 text-4xl font-bold">
+      JSON File Viewer
+    </h1>
+    <div class="grid grid-cols-3 gap-8">
+      <div class="col-span-1">
+        <JsonFileList @file-selected="handleFileSelected" />
+      </div>
+      <div class="col-span-2">
+        <JsonFileProperties :selected-file="selectedFile" />
+      </div>
+    </div>
   </div>
 </template>
