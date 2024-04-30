@@ -33,10 +33,10 @@ pnpm i
 
 ## Link Log Folder (Important)
 
-You need to create a softlink to the `log` folder under the **project root folder** to run the website properly:
+You need to create a softlink to the `logs` folder under the **project root folder** to run the website properly:
 
 ```bash
-ln -s <location-of-your-log-folder> log
+ln -s <location-of-your-log-folder> logs
 ```
 
 ## Run the website
